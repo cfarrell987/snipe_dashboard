@@ -1,10 +1,9 @@
 import requests
 import os
+import json
 
 
-def get(url):
-    url = url
-
+def settings():
     with open("api_key.txt", "r") as file:
         api_key = file.read()
 
@@ -19,13 +18,32 @@ def get(url):
         "Authorization": api_key.rstrip("'\n\"")
     }
 
+    return querystring, headers
+
+
+def get_model(url):
+    url = url
+
+
+def get_hardware(url, querystring, headers):
+    url = url
+    querystring = querystring
+    headers = headers
     response = requests.request("GET",
                                 url,
                                 headers=headers,
                                 params=querystring)
-    print(headers)
-    print(response.text)
+
+    return response.json()
+
+
+def parser(response):
+    response = response
+    print(json.dumps(response, indent=4))
 
 
 if __name__ == '__main__':
-    get("https://develop.snipeitapp.com/api/v1/hardware")
+    querystring, headers = settings()
+    hardware = get_hardware("https://develop.snipeitapp.com/api/v1/hardware",
+                            querystring, headers)
+    parser(hardware)
