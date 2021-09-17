@@ -1,11 +1,45 @@
 import requests
 import os
 import json
+import pwd
+
+def get_logged_user():
+
+    try:
+        return os.getlogin()
+    except:
+        pass
+
+    try:
+        user = os.environ['USER']
+    except KeyError:
+        return getpass.getuser()
+
+    if user == 'root':
+        try:
+            return os.environ['SUDO_USER']
+        except KeyError:
+            pass
+
+        try:
+            pkexec_uid = int(os.environ['PKEXEC_UID'])
+            return pwd.getpwuid(pkexec_uid).pw_name
+        except KeyError:
+            pass
+    return user
+
+def get_home_path():
+    home_dir = pwd.getpwnam(get_logged_user()).pw_dir
+    return home_dir
 
 
 # Define Settings needed for authenticating and sending a GET request. Will Change this later as querystring will be fairly specific to each GET request
-def rest_settings():
-    with open("api_key.txt", "r") as file:
+def rest_settings(home):
+
+    home_path = home
+    api_key = str(home_path + "/Development/snipe_dashboard/resources/api_key.txt")
+
+    with open(api_key, "r") as file:
         api_key = file.read()
 
     querystring = {
@@ -79,7 +113,11 @@ def parser(models, hardware):
 #    print(json.dumps(hardware, indent=4))
 
 if __name__ == '__main__':
-    querystring, headers = rest_settings()
+
+    home_path = get_home_path()
+
+    querystring, headers = rest_settings(home_path)
+    print(headers)
     models = get_models("https://develop.snipeitapp.com/api/v1/hardware",
                         headers)
     hardware = get_hardware("https://develop.snipeitapp.com/api/v1/hardware",
