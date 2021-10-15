@@ -1,7 +1,9 @@
-import requests
 import os
+import requests
 import json
 import pwd
+from database.data import data
+
 
 def get_logged_user():
 
@@ -28,6 +30,7 @@ def get_logged_user():
             pass
     return user
 
+
 def get_home_path():
     home_dir = pwd.getpwnam(get_logged_user()).pw_dir
     return home_dir
@@ -37,7 +40,8 @@ def get_home_path():
 def rest_settings(home):
 
     home_path = home
-    api_key = str(home_path + "/Development/snipe_dashboard/resources/api_key.txt")
+    api_key = str(home_path +
+                  "/Development/snipe_dashboard/resources/api_key.txt")
 
     with open(api_key, "r") as file:
         api_key = file.read()
@@ -123,3 +127,4 @@ if __name__ == '__main__':
     hardware = get_hardware("https://develop.snipeitapp.com/api/v1/hardware",
                             querystring, headers)
     parser(models, hardware)
+    data()
