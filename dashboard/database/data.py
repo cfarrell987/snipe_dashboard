@@ -3,9 +3,8 @@ import os
 import json
 
 
-def create_database():
-    return ("db")
-
-
-if __name__ == '__data__':
-    create_database()
+def conn_database():
+    conn = psycopg2.connect("dbname=dbSnipeHardware user=admin")
+    cur = conn.cursor()
+    cur.close()
+    conn.close()

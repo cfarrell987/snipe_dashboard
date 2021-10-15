@@ -1,8 +1,8 @@
 import os
-import requests
 import json
 import pwd
-from database.data import data
+import requests
+from database import data
 
 
 def get_logged_user():
@@ -127,4 +127,4 @@ if __name__ == '__main__':
     hardware = get_hardware("https://develop.snipeitapp.com/api/v1/hardware",
                             querystring, headers)
     parser(models, hardware)
-    data()
+    data = data.conn_database()
