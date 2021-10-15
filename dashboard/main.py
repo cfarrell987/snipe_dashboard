@@ -127,4 +127,5 @@ if __name__ == '__main__':
     hardware = get_hardware("https://develop.snipeitapp.com/api/v1/hardware",
                             querystring, headers)
     parser(models, hardware)
-    data = data.conn_database()
+    load_json = data.load_json()
+    #connect = data.conn_database()
